@@ -48,7 +48,9 @@ bool Prime::isPrimeDynSub(int n){
     if(n % 3 == 0)
         return false;
     int l = sqrt(n) + 1;
-    for(auto it = list.begin(); *it <= l && it != list.end(); it++){
+    for(auto it = list.begin(); it != list.end(); it++){
+		if (*it > l)
+			break;
         if(!(n % (*it)))
             return false;
     }

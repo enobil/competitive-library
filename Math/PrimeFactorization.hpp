@@ -6,15 +6,15 @@ class PrimeFactorization{
     Prime *_prime;
   public:
     PrimeFactorization(Prime*);
-    std::vector<int> factorList(int);
+    std::vector<int>* factorList(int);
 };
 
 PrimeFactorization::PrimeFactorization(Prime *prime){
     _prime = prime;
 }
 
-std::vector<int> PrimeFactorization::factorList(int n){
-    std::vector<int> v;
+std::vector<int>* PrimeFactorization::factorList(int n){
+    std::vector<int> *v = new std::vector<int>;
     int x = n;
     _prime->isPrimeDyn(n);
     auto it = _prime->list.begin();
@@ -22,7 +22,7 @@ std::vector<int> PrimeFactorization::factorList(int n){
     while(x > 1 && it != itend){
         register int i = *it;
         while(!(x % i)){
-            v.push_back(i);
+            v->push_back(i);
             x /= i;
         }
         it++;

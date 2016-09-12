@@ -1,7 +1,7 @@
 #define SEGMENTTREEMAX_H
 
 #ifndef BITMANIPULATION_H
-#include "BitManipulation.hpp"
+#include "Bit Manipulation\BitManipulation.hpp"
 #endif
 
 class SegmentTreeMax {
@@ -10,16 +10,18 @@ class SegmentTreeMax {
 	int _capacity;
 	int _size;
 	void fill(int *arr, int ix, int s, int e);
-	int mid(int x, int y) { return x + ((y - x) / 2 ); };
-	static int left(int x) { return (x * 2) + 1; }
-	static int right(int x) { return (x * 2) + 2; }
-	static int max(int x, int y) { return x > y ? x : y; }
-	static int capacityCalc(int size);
+	static inline int mid(int x, int y) { return x + ((y - x) / 2 ); };
+	static inline int left(int x) { return (x * 2) + 1; }
+	static inline int right(int x) { return (x * 2) + 2; }
+	static inline int max(int x, int y) { return x > y ? x : y; }
+	static inline int capacityCalc(int size);
 	int search(int s, int e, int treeIx, int treeS, int treeE);
+	int update(int pos, int val, int treeIx, int treeS, int treeE);
 public:
 	//TODO: Use operator overloading [a][b]
 	int Get(int s, int e);
-	SegmentTreeMax(int capacity, int *arr);
+	void Update(int pos, int val);
+	SegmentTreeMax(int size, int *arr);
 	~SegmentTreeMax();
 };
 
@@ -35,6 +37,22 @@ int SegmentTreeMax::search(int s, int e, int treeIx, int treeS, int treeE) {
 	return max(
 		search(s, e, left(treeIx), treeS, mid(treeS, treeE)),
 		search(s, e, right(treeIx), mid(treeS, treeE) + 1, treeE));
+}
+
+int SegmentTreeMax::update(int pos, int val, int treeIx, int treeS, int treeE) {
+	if (treeS == pos && treeE == pos) {
+		_tree[treeIx] = val;
+	}
+	else if (treeS <= pos && pos <= treeE) {
+		update(pos, val, left(treeIx), treeS, mid(treeS, treeE));
+		update(pos, val, right(treeIx), mid(treeS, treeE) + 1, treeE);
+		_tree[treeIx] = max(_tree[left(treeIx)], _tree[right(treeIx)]);
+	}
+	return _tree[treeIx];
+}
+
+void SegmentTreeMax::Update(int pos, int val) {
+	update(pos, val, 0, 0, _size - 1);
 }
 
 int SegmentTreeMax::Get(int s, int e) {
